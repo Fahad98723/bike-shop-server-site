@@ -120,6 +120,7 @@ async function run() {
                 price : data.price,
                 image : data.image,
                 phone : data.phone,
+                zip : data.zip,
                 status : data.status
             }
         }
