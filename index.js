@@ -59,9 +59,8 @@ async function run() {
         res.json(user)
     })
 
-    app.put('/users/admin', async(req, res) => {
+    app.put('/users/admin', async (req, res) => {
         const data = req.body
-        console.log(data);
         const filter = {email : data.email}
         const updateDoc = {
             $set: {
@@ -71,22 +70,65 @@ async function run() {
         const user = await userCollection.updateOne(filter, updateDoc);
         res.json(user)
     })
+
+    app.get('/users/:email', async (req, res) => {
+        const email = req.params.email
+        const query =  {email :  email}
+        const user = await userCollection.findOne(query)
+        let isAdmin = false
+        if (user?.role === 'admin') {
+            isAdmin = true
+        }
+        else{
+            isAdmin = false
+        }
+        res.send({admin : isAdmin})
+    })
     app.post('/bikes', async (req, res) => {
         const data = req.body
         const result = await bikeCollection.insertOne(data)
         res.json(result)
     })
-
+    app.delete('/bikes/:id', async (req, res) => {
+        const id = req.params.id
+        const query = {_id : ObjectId(id)}
+        const result = await bikeCollection.deleteOne(query)
+        res.json(result)
+    })
     app.post('/orderItems', async (req, res) => {
         const data = req.body
-        console.log(data);
         const result = await orderCollection.insertOne(data)
+        res.json(result)
+    })
+    app.delete('/orderItems/:id', async (req, res) => {
+        const id = req.params.id
+        const query = {_id : ObjectId(id)}
+        const result = await orderCollection.deleteOne(query)
+        res.json(result)
+    })
+    app.put('/orderItems/:id', async (req, res) => {
+        const id = req.params.id
+        const data = req.body
+        const query = {_id : ObjectId(id)}
+        const option = {upsert : true}
+        const updateDoc = {
+            $set : {
+                name : data.name,
+                address : data.address,
+                email : data.email,
+                bikeName : data.bikeName,
+                price : data.price,
+                image : data.image,
+                phone : data.phone,
+                status : data.status
+            }
+        }
+        const result = await orderCollection.updateOne(query, updateDoc, option)
         res.json(result)
     })
       
     app.get('/orderItems', async (req, res) => {
         const query = req.query
-        console.log(query);
         let result = {}
         if (query) {
             result = await orderCollection.find(query).toArray()
