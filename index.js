@@ -22,32 +22,37 @@ async function run() {
       const userCollection = database.collection("users");
       const reviewCollection = database.collection("review");
 
+    //getting all bikes from database
     app.get('/bikes', async (req, res) => {
         const cursor = bikeCollection.find({})
         const allBikes = await cursor.toArray()
         res.send(allBikes)
     })
-
+    //getting species bikes from database
     app.get('/bikes/:id', async (req, res) => {
         const id = req.params.id 
         const query = {_id : ObjectId(id)}
         const result = await bikeCollection.findOne(query)
         res.send(result)
     })
+    //add users data on database
     app.post('/users', async(req, res) => {
         const data = req.body
         const user = await userCollection.insertOne(data)
         res.json(user)
     })
+    //add review of users on database
     app.post('/review', async(req, res) => {
         const data = req.body
         const review = await reviewCollection.insertOne(data)
         res.json(review)
     })
+    //getting review of users from database
     app.get('/review', async(req, res) => {
         const review = await reviewCollection.find({}).toArray()
         res.send(review)
     })
+    //if your data already had saved in the database then we don't want save it again
     app.put('/users', async(req, res) => {
         const data = req.body
         const filter = {email : data.email}
@@ -59,6 +64,7 @@ async function run() {
         res.json(user)
     })
 
+    //making users admin 
     app.put('/users/admin', async (req, res) => {
         const data = req.body
         const filter = {email : data.email}
@@ -71,6 +77,7 @@ async function run() {
         res.json(user)
     })
 
+    //finding admin or not from database
     app.get('/users/:email', async (req, res) => {
         const email = req.params.email
         const query =  {email :  email}
@@ -84,28 +91,33 @@ async function run() {
         }
         res.send({admin : isAdmin})
     })
+    //add bikes on database
     app.post('/bikes', async (req, res) => {
         const data = req.body
         const result = await bikeCollection.insertOne(data)
         res.json(result)
     })
+    //deleting species bikes from database
     app.delete('/bikes/:id', async (req, res) => {
         const id = req.params.id
         const query = {_id : ObjectId(id)}
         const result = await bikeCollection.deleteOne(query)
         res.json(result)
     })
+    //adding orderitems on database
     app.post('/orderItems', async (req, res) => {
         const data = req.body
         const result = await orderCollection.insertOne(data)
         res.json(result)
     })
+    //deleting species orderitems from database
     app.delete('/orderItems/:id', async (req, res) => {
         const id = req.params.id
         const query = {_id : ObjectId(id)}
         const result = await orderCollection.deleteOne(query)
         res.json(result)
     })
+    //user  orders status update
     app.put('/orderItems/:id', async (req, res) => {
         const id = req.params.id
         const data = req.body
@@ -127,7 +139,7 @@ async function run() {
         const result = await orderCollection.updateOne(query, updateDoc, option)
         res.json(result)
     })
-      
+    //getting order items from database
     app.get('/orderItems', async (req, res) => {
         const query = req.query
         let result = {}
@@ -139,10 +151,7 @@ async function run() {
         }
         res.send(result)
     })
-    
-    
-
-
+    //adding users on database
     app.post('/users', async (req, res) => {
       const data = req.body 
       const users = await userCollection.insertOne(data)
