@@ -12,7 +12,7 @@ The motivation of this site from those biker and bike lovers who were ride with 
 
 * ### `Server Works`
 
-I use mongodb for saving all data and there is every type of data where we stored userdata, bookingdata, bikesdata etc . after login we send you email and name into data base where we stored them as users . if admin want to add bikes then we stored them in database as bikes . user purchase and order items stored in the site as orders
+I use mongodb for saving all data and there is every type of data where we stored userdata, bookingdata, bikesdata etc . after login we send you email and name into data base where we stored them as users . if admin want to add bikes then we stored them in database as bikes . user purchase and order items stored in the site as orders. and we hosted the server data on heroku
 
 * ### `Features`
 
